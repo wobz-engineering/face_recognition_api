@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request, redirect
 import face_recognition
 import ast
@@ -78,5 +79,7 @@ def compare_faces(original_encodings, file_stream):
 
     return jsonify(result)
 
+PORT = int(os.environ.get("PORT", 8080))
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(threaded=True,host='0.0.0.0',port=PORT)

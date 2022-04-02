@@ -1,0 +1,6 @@
+steps:
+  # build & push the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'us-west1-docker.pkg.dev/$PROJECT_ID/wobz-docker-images/face-id-recognition:latest', '.' ]
+images:
+- 'us-west1-docker.pkg.dev/$PROJECT_ID/wobz-docker-images/face-id-recognition:latest'
