@@ -2,6 +2,8 @@ import os
 from flask import Flask, jsonify, request, redirect
 import face_recognition
 import ast
+import urllib.request
+import io
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -9,6 +11,7 @@ app = Flask(__name__)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/generate-encodings', methods=['POST'])
 def post_generate_encodings():
@@ -22,6 +25,17 @@ def post_generate_encodings():
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            return get_faces_encodings(file)
+
+@app.route('/generate-encodings-from-url', methods=['POST'])
+def post_generate_encodings_from_url():
+    # Check if a valid image file was uploaded
+    if request.method == 'POST':
+        file_url = request.form.get('file_url')
+        with urllib.request.urlopen(file_url) as url:
+            file = io.BytesIO(url.read())
+        if file:
             # The image file seems valid! Detect faces and return the result.
             return get_faces_encodings(file)
 
